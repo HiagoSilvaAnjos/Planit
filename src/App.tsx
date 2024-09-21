@@ -12,12 +12,12 @@ function App() {
       <div
         className={`${toggleTheme ? "flex justify-center items-center h-[100vh] w-full bg-slate-700" : "flex justify-center items-center h-[100vh] w-full bg-black"}`}
       >
-        <h1
+        <button
           onClick={handleClick}
-          className="text-xl text-white p-3 cursor-pointer bg-green-500 rounded-sm hover:bg-green-600 transition-all duration-[0.2s]"
+          className=" text-xl text-white p-3 cursor-pointer bg-green-500 rounded-sm hover:bg-green-600 transition-all duration-[0.2s]"
         >
           Planit
-        </h1>
+        </button>
       </div>
     </>
   );
