@@ -10,11 +10,11 @@ function App() {
   return (
     <>
       <div
-        className={`${toggleTheme ? "flex justify-center items-center h-[100vh] w-full bg-slate-700" : "flex justify-center items-center h-[100vh] w-full bg-black"}`}
+        className={`${toggleTheme ? "flex h-[100vh] w-full items-center justify-center bg-slate-700" : "flex h-[100vh] w-full items-center justify-center bg-black"}`}
       >
         <button
           onClick={handleClick}
-          className=" text-xl text-white p-3 cursor-pointer bg-green-500 rounded-sm hover:bg-green-600 transition-all duration-[0.2s]"
+          className="cursor-pointer rounded-sm bg-green-500 p-3 text-xl text-white transition-all duration-[0.2s] hover:bg-green-600"
         >
           Planit
         </button>
