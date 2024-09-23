@@ -1,6 +1,11 @@
 import { HomeIcon, TasksIcon } from "../../assets/IconsComponents";
 import SidebarButton from "../SidebarButton/SidebarButton";
 
+// const sum = (x: number, y: number): number => {
+//               console.log('sum in process...')
+// return x + y
+// }
+
 const Sidebar = () => {
   return (
     <div className="h-screen w-[272px] bg-white">
