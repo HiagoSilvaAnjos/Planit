@@ -1,6 +1,10 @@
-import { TasksProps } from "../interfaces/Tasks";
-
-export const TASKS: TasksProps[] = [
+export const TASKS: {
+  id: number;
+  title: string;
+  description: string;
+  time: "morning" | "afternoon" | "evening";
+  status: "not_started" | "in_progress" | "done";
+}[] = [
   {
     id: 1,
     title: "Título da Tarefa",
