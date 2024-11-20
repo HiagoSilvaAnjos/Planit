@@ -1,3 +1,5 @@
+type IconProps = React.SVGProps<SVGSVGElement>;
+
 export const HomeIcon = () => {
   return (
     <svg
@@ -266,6 +268,94 @@ export const SunIcon = () => {
         d="M15.8916 4.60834L14.7166 5.78334"
         stroke="#9A9C9F"
         stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const CheckIcon = () => {
+  return (
+    <svg
+      width="20"
+      height="25"
+      viewBox="0 0 14 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.5809 3.84912L5.29513 10.1348L2.43799 7.27769"
+        stroke="white"
+        stroke-width="1.71429"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const LoaderIcon: React.FC<IconProps> = (props) => {
+  return (
+    <svg
+      width="20"
+      height="25"
+      viewBox="0 0 14 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props} // Passa as props como className, etc.
+    >
+      <g clipPath="url(#clip0_176_97)">
+        <path
+          d="M11.9215 7.33537C11.9214 8.42142 11.5775 9.47958 10.9391 10.3582C10.3007 11.2368 9.40058 11.8907 8.36767 12.2263C7.33477 12.5619 6.22214 12.5619 5.18925 12.2262C4.15637 11.8906 3.25624 11.2366 2.61789 10.358C1.97954 9.47931 1.63573 8.42113 1.63574 7.33508C1.63575 6.24903 1.97957 5.19086 2.61794 4.31223C3.2563 3.43359 4.15643 2.7796 5.18932 2.44399C6.22222 2.10837 7.33484 2.10835 8.36774 2.44394"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_176_97">
+          <rect
+            width="13.7143"
+            height="13.7143"
+            fill="currentColor"
+            transform="translate(0.142822 0.422913)"
+          />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
+export const DetailsIcon: React.FC<IconProps> = (props) => {
+  return (
+    <svg
+      width="20"
+      height="21"
+      viewBox="0 0 20 21"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M14.6667 11.0578V15.7245C14.6667 16.137 14.5028 16.5327 14.2111 16.8244C13.9193 17.1161 13.5237 17.28 13.1111 17.28H4.55556C4.143 17.28 3.74733 17.1161 3.45561 16.8244C3.16389 16.5327 3 16.137 3 15.7245V7.1689C3 6.75634 3.16389 6.36068 3.45561 6.06895C3.74733 5.77723 4.143 5.61334 4.55556 5.61334H9.22222"
+        stroke="#9A9C9F"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12.333 3.28003H16.9997V7.9467"
+        stroke="#9A9C9F"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M8.44434 11.8356L16.9999 3.28003"
+        stroke="#9A9C9F"
+        stroke-width="1.8"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
