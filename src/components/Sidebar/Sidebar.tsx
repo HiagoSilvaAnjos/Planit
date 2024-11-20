@@ -3,7 +3,7 @@ import SidebarButton from "../SidebarButton/SidebarButton";
 
 const Sidebar = () => {
   return (
-    <div className="h-screen w-[272px] bg-white">
+    <div className="h-screen w-72 bg-white">
       <div className="space-y-4 px-8 py-4">
         <h1 className="text-xl font-semibold text-[#00adb5]">Planit</h1>
         <p>

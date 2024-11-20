@@ -44,13 +44,13 @@ const Tasks = () => {
   };
 
   return (
-    <div className="w-full space-y-4 px-8 py-16">
+    <div className="w-full space-y-4 space-y-6 px-8 py-16">
       <div className="flex w-full justify-between">
         <div>
           <span className="text-xs font-semibold text-[#00adb8]">
             Minhas Tarefas
           </span>
-          <p className="text-xl font-semibold">Tasks</p>
+          <p className="text-xl font-semibold">Minhas Tarefas</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="ghost">
