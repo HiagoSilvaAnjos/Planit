@@ -2,7 +2,9 @@ import {
   CheckIcon,
   DetailsIcon,
   LoaderIcon,
+  TrashIcon,
 } from "../../assets/IconsComponents";
+import Button from "../Button/Button";
 
 interface TaskItemProps {
   task: {
@@ -13,9 +15,14 @@ interface TaskItemProps {
     status: "not_started" | "in_progress" | "done";
   };
   handleCheckboxClick?: (id: number) => void;
+  handleTasksDeleteClick?: (id: number) => void;
 }
 
-const TaskItem = ({ task, handleCheckboxClick }: TaskItemProps) => {
+const TaskItem = ({
+  task,
+  handleCheckboxClick,
+  handleTasksDeleteClick,
+}: TaskItemProps) => {
   const getStatusClasses = () => {
     if (task.status == "done") {
       return "bg-[#00ADB5] text-[#00ADB5]";
@@ -51,9 +58,19 @@ const TaskItem = ({ task, handleCheckboxClick }: TaskItemProps) => {
         </label>
         {task.title}
       </div>
-      <a href="#" className="transition hover:opacity-75">
-        <DetailsIcon />
-      </a>
+
+      <div className="flex items-center justify-center gap-2">
+        <Button
+          variant="ghost"
+          onClick={() => handleTasksDeleteClick!(task.id)}
+        >
+          <TrashIcon className="text-[#9A9C9F]" />
+        </Button>
+
+        <a href="#" className="transition hover:opacity-75">
+          <DetailsIcon />
+        </a>
+      </div>
     </div>
   );
 };

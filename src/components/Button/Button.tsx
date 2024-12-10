@@ -1,9 +1,10 @@
 interface ButtonProps {
   children: React.ReactNode;
   variant?: "primary" | "ghost";
+  onClick?: () => void | undefined;
 }
 
-const Button = ({ children, variant = "primary" }: ButtonProps) => {
+const Button = ({ children, variant = "primary", onClick }: ButtonProps) => {
   const getVariantClasses = () => {
     if (variant === "primary") return "bg-[#00adb5] text-white";
 
@@ -13,6 +14,7 @@ const Button = ({ children, variant = "primary" }: ButtonProps) => {
   return (
     <button
       className={`${getVariantClasses()} flex items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold transition hover:opacity-75`}
+      onClick={onClick}
     >
       {children}
     </button>
