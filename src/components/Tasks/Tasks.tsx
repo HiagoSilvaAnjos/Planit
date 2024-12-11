@@ -11,9 +11,11 @@ import TasksSeparator from "../TasksSeparator/TasksSeparator";
 import { TASKS } from "../../constantes/tasks";
 import TaskItem from "../TaskItem/TaskItem";
 import { toast } from "sonner";
+import AddTaskDialog from "../AddTaskDialog/AddTaskDialog";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState(TASKS);
+  const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
 
   const morningTasks = tasks.filter((task) => task.time == "morning");
   const afternoonTasks = tasks.filter((task) => task.time == "afternoon");
@@ -67,10 +69,12 @@ const Tasks = () => {
             Limpar Tarefas
             <TrashIcon />
           </Button>
-          <Button>
+          <Button onClick={() => setAddTaskDialogIsOpen(!addTaskDialogIsOpen)}>
             Adicionar tarefa
             <AddIcon />
           </Button>
+
+          <AddTaskDialog isOpen={addTaskDialogIsOpen} />
         </div>
       </div>
 
