@@ -3,16 +3,47 @@ import Input from "../Input/Input";
 import Button from "../Button/Button";
 import { CSSTransition } from "react-transition-group";
 import "./AddTaskDialog.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Select from "../TimeSelect/TimeSelect";
-
+import { v4 as uuidv4 } from "uuid";
 interface AddTaskDialogProps {
   isOpen: boolean;
   DialogClose: () => void;
+  HandleSubmit: (task: {
+    id: string;
+    title: string;
+    description: string;
+    time: "morning" | "afternoon" | "evening";
+    status: "not_started" | "in_progress" | "done";
+  }) => void;
 }
 
-const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
+const AddTaskDialog = ({
+  isOpen,
+  DialogClose,
+  HandleSubmit,
+}: AddTaskDialogProps) => {
   const nodeRef = useRef<HTMLDivElement | null>(null);
+  const [title, setTitle] = useState<string>("");
+  const [time, setTime] = useState<"morning" | "afternoon" | "evening">(
+    "morning"
+  );
+  const [description, setDescription] = useState<string>("");
+
+  const handleSaveClick = () => {
+    HandleSubmit({
+      id: uuidv4(),
+      title,
+      time,
+      description,
+      status: "in_progress",
+    });
+
+    setTitle("");
+    setTime("morning");
+    setDescription("");
+    DialogClose();
+  };
 
   return (
     <CSSTransition
@@ -40,12 +71,23 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
                   id="title"
                   label="Título"
                   placeholder={"Insira o título da tarefa"}
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
                 />
-                <Select />
+                <Select
+                  value={time}
+                  onChange={(event) =>
+                    setTime(
+                      event.target.value as "morning" | "afternoon" | "evening"
+                    )
+                  }
+                />
                 <Input
                   id="description"
                   label="Descrição"
                   placeholder={"Descreva a tarefa"}
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
                 />
                 <div className="flex gap-3">
                   <Button
@@ -56,7 +98,11 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
                   >
                     Cancelar
                   </Button>
-                  <Button className="w-full" size="large">
+                  <Button
+                    onClick={handleSaveClick}
+                    className="w-full"
+                    size="large"
+                  >
                     Salvar
                   </Button>
                 </div>

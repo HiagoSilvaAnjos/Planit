@@ -13,6 +13,14 @@ import TaskItem from "../TaskItem/TaskItem";
 import { toast } from "sonner";
 import AddTaskDialog from "../AddTaskDialog/AddTaskDialog";
 
+interface TaskProps {
+  id: string;
+  title: string;
+  description: string;
+  time: "morning" | "afternoon" | "evening";
+  status: "not_started" | "in_progress" | "done";
+}
+
 const Tasks = () => {
   const [tasks, setTasks] = useState(TASKS);
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
@@ -25,13 +33,13 @@ const Tasks = () => {
     setAddTaskDialogIsOpen(false);
   };
 
-  const handleTasksDeleteClick = (taskId: number) => {
+  const handleTasksDeleteClick = (taskId: string) => {
     const newTasks = tasks.filter((task) => task.id != taskId);
     setTasks(newTasks);
     toast.success("Tarefa removida com sucesso!");
   };
 
-  const handleCheckboxClick = (taskID: number) => {
+  const handleCheckboxClick = (taskID: string) => {
     const newTasks = tasks.map((task) => {
       if (task.id !== taskID) return task;
 
@@ -59,6 +67,11 @@ const Tasks = () => {
     setTasks(newTasks);
   };
 
+  const handleAddTask = (task: TaskProps) => {
+    toast.success("Tarefa concluída com sucesso!");
+    setTasks([...tasks, task]);
+  };
+
   return (
     <div className="space-y- w-full space-y-4 px-8 py-16">
       <div className="flex w-full justify-between">
@@ -81,6 +94,7 @@ const Tasks = () => {
           <AddTaskDialog
             isOpen={addTaskDialogIsOpen}
             DialogClose={handleDialogClose}
+            HandleSubmit={handleAddTask}
           />
         </div>
       </div>

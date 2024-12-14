@@ -8,14 +8,14 @@ import Button from "../Button/Button";
 
 interface TaskItemProps {
   task: {
-    id: number;
+    id: string;
     title: string;
     description: string;
     time: "morning" | "afternoon" | "evening";
     status: "not_started" | "in_progress" | "done";
   };
-  handleCheckboxClick?: (id: number) => void;
-  handleTasksDeleteClick?: (id: number) => void;
+  handleCheckboxClick?: (id: string) => void;
+  handleTasksDeleteClick?: (id: string) => void;
 }
 
 const TaskItem = ({
