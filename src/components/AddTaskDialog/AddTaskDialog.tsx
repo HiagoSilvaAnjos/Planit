@@ -18,6 +18,11 @@ interface AddTaskDialogProps {
   }) => void;
 }
 
+interface errosProps {
+  InputName: string;
+  message: string;
+}
+
 const AddTaskDialog = ({
   isOpen,
   DialogClose,
@@ -29,12 +34,37 @@ const AddTaskDialog = ({
     "morning"
   );
   const [description, setDescription] = useState<string>("");
+  const [errors, setErrors] = useState<errosProps[]>([]);
 
   const handleSaveClick = () => {
-    if (!title.trim() || !description.trim()) {
-      alert("Todos os campos são obrigatórios!");
+    const newErrors = [];
+    if (!title.trim()) {
+      newErrors.push({
+        InputName: "title",
+        message: "Título é obrigatório",
+      });
+    }
+
+    if (!time.trim()) {
+      newErrors.push({
+        InputName: "time",
+        message: "Horário é obrigatório",
+      });
+    }
+
+    if (!description.trim()) {
+      newErrors.push({
+        InputName: "description",
+        message: "Descrição é obrigatório",
+      });
+    }
+
+    if (newErrors.length > 0) {
+      setErrors(newErrors);
       return;
     }
+
+    setErrors([]);
 
     HandleSubmit({
       id: uuidv4(),
@@ -49,6 +79,12 @@ const AddTaskDialog = ({
     setDescription("");
     DialogClose();
   };
+
+  const titleError = errors.find((error) => error.InputName === "title");
+  const timeError = errors.find((error) => error.InputName === "time");
+  const descriptionError = errors.find(
+    (error) => error.InputName === "description"
+  );
 
   return (
     <CSSTransition
@@ -78,7 +114,9 @@ const AddTaskDialog = ({
                   placeholder={"Insira o título da tarefa"}
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
+                  error={titleError}
                 />
+
                 <Select
                   value={time}
                   onChange={(event) =>
@@ -86,17 +124,25 @@ const AddTaskDialog = ({
                       event.target.value as "morning" | "afternoon" | "evening"
                     )
                   }
+                  id="time"
+                  error={timeError}
                 />
+
                 <Input
                   id="description"
                   label="Descrição"
                   placeholder={"Descreva a tarefa"}
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
+                  error={descriptionError}
                 />
+
                 <div className="flex gap-3">
                   <Button
-                    onClick={DialogClose}
+                    onClick={() => {
+                      DialogClose();
+                      setErrors([]);
+                    }}
                     className="w-full"
                     variant="secondary"
                     size="large"
