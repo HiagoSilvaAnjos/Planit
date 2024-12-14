@@ -4,6 +4,7 @@ import Button from "../Button/Button";
 import { CSSTransition } from "react-transition-group";
 import "./AddTaskDialog.css";
 import { useRef } from "react";
+import Select from "../Select/Select";
 
 interface AddTaskDialogProps {
   isOpen: boolean;
@@ -40,11 +41,7 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
                   label="Título"
                   placeholder={"Insira o título da tarefa"}
                 />
-                <Input
-                  id="time"
-                  label="Horário"
-                  placeholder={"Insira o horário da tarefa"}
-                />
+                <Select />
                 <Input
                   id="description"
                   label="Descrição"
