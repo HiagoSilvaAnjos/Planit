@@ -31,6 +31,11 @@ const AddTaskDialog = ({
   const [description, setDescription] = useState<string>("");
 
   const handleSaveClick = () => {
+    if (!title.trim() || !description.trim()) {
+      alert("Todos os campos são obrigatórios!");
+      return;
+    }
+
     HandleSubmit({
       id: uuidv4(),
       title,
