@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 import { CSSTransition } from "react-transition-group";
 import "./AddTaskDialog.css";
 import { useRef } from "react";
-import Select from "../Select/Select";
+import Select from "../TimeSelect/TimeSelect";
 
 interface AddTaskDialogProps {
   isOpen: boolean;
