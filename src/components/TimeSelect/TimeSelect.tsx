@@ -14,7 +14,7 @@ const TimeSelect = ({ error, ...rest }: TimeSelectProps) => {
     <div className="flex flex-col space-y-1">
       <InputLabel htmlFor="time">Horário</InputLabel>
       <select
-        className="rounded-lg border border-solid border-[#ECECEC] px-4 py-3 outline-[#00ADB5] placeholder:text-sm placeholder:text-[#080808]"
+        className="rounded-lg border border-solid border-[#ECECEC] px-4 py-3 outline-brand-primary placeholder:text-sm placeholder:text-[#080808]"
         {...rest}
       >
         <option value="morning">Manhã</option>

@@ -15,9 +15,9 @@ const Button = ({
   ...rest
 }: ButtonProps) => {
   const getVariantClasses = () => {
-    if (variant === "primary") return "bg-[#00adb5] text-white";
-    if (variant === "secondary") return "text-[#38383E] bg-[#EEEEEE]";
-    if (variant === "ghost") return "text-[#818181] bg-transparent";
+    if (variant === "primary") return "bg-brand-primary text-white";
+    if (variant === "secondary") return "text-[#38383E] bg-brand-light-gray";
+    if (variant === "ghost") return "text-brand-dark-gray bg-transparent";
   };
 
   const getSizeClasses = () => {

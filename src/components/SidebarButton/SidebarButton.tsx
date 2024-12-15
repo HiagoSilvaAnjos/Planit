@@ -5,9 +5,10 @@ interface SidebarButtonProps {
 
 const SidebarButton = ({ children, variant }: SidebarButtonProps) => {
   const getVariantClasses = () => {
-    if (variant === "unselected") return "text-[#35383e]";
+    if (variant === "unselected") return "text-brand-dark-blue";
 
-    if (variant === "selected") return "bg-[#e6f7f8] text-[#00adb5]";
+    if (variant === "selected")
+      return "bg-brand-primary bg-opacity-15 text-brand-primary";
   };
 
   return (

@@ -25,15 +25,15 @@ const TaskItem = ({
 }: TaskItemProps) => {
   const getStatusClasses = () => {
     if (task.status == "done") {
-      return "bg-[#00ADB5] text-[#00ADB5]";
+      return "bg-brand-primary text-brand-primary";
     }
 
     if (task.status == "in_progress") {
-      return "bg-[#FFAA04] text-[#FFAA04]";
+      return "bg-brand-process text-brand-process";
     }
 
     if (task.status == "not_started") {
-      return "bg-[#35383E] bg-opacity-10 text-[#35383E]";
+      return "bg-brand-dark-blue bg-opacity-10 text-brand-dark-blue";
     }
   };
 
@@ -64,7 +64,7 @@ const TaskItem = ({
           variant="ghost"
           onClick={() => handleTasksDeleteClick!(task.id)}
         >
-          <TrashIcon className="text-[#9A9C9F]" />
+          <TrashIcon className="text-brand-text-gray" />
         </Button>
 
         <a href="#" className="transition hover:opacity-75">
