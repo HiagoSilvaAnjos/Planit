@@ -144,7 +144,7 @@ const AddTaskDialog = ({
                       setErrors([]);
                     }}
                     className="w-full"
-                    variant="secondary"
+                    color="secondary"
                     size="large"
                   >
                     Cancelar
