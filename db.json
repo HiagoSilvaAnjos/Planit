@@ -41,13 +41,6 @@
       "description": "Criar documentação detalhada para as novas features",
       "time": "evening",
       "status": "in_progress"
-    },
-    {
-      "id": "891d9cea-2d15-47d9-9c6b-f2f5ff94aa26",
-      "title": "test",
-      "time": "morning",
-      "description": "test",
-      "status": "in_progress"
     }
   ]
 }
