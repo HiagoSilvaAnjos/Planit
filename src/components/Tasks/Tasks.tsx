@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AddIcon,
   CloudSunIcon,
@@ -8,7 +8,6 @@ import {
 } from "../../assets/IconsComponents";
 import Button from "../Button/Button";
 import TasksSeparator from "../TasksSeparator/TasksSeparator";
-import { TASKS } from "../../constantes/tasks";
 import TaskItem from "../TaskItem/TaskItem";
 import { toast } from "sonner";
 import AddTaskDialog from "../AddTaskDialog/AddTaskDialog";
@@ -22,8 +21,22 @@ interface TaskProps {
 }
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState(TASKS);
+  const [tasks, setTasks] = useState<TaskProps[]>([]);
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchTask = async () => {
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "GET",
+      });
+
+      const tasks = await response.json();
+
+      setTasks(tasks);
+    };
+
+    fetchTask();
+  }, []);
 
   const morningTasks = tasks.filter((task) => task.time == "morning");
   const afternoonTasks = tasks.filter((task) => task.time == "afternoon");
