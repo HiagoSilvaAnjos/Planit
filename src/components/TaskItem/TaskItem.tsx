@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   CheckIcon,
   DetailsIcon,
@@ -5,24 +6,44 @@ import {
   TrashIcon,
 } from "../../assets/IconsComponents";
 import Button from "../Button/Button";
+import { toast } from "sonner";
 
-interface TaskItemProps {
-  task: {
-    id: string;
-    title: string;
-    description: string;
-    time: "morning" | "afternoon" | "evening";
-    status: "not_started" | "in_progress" | "done";
-  };
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  time: "morning" | "afternoon" | "evening";
+  status: "not_started" | "in_progress" | "done";
+}
+
+export interface TaskItemProps {
+  task: Task;
   handleCheckboxClick?: (id: string) => void;
-  handleTasksDeleteClick?: (id: string) => void;
+  onDeleteSuccess: (taskId: string) => void;
 }
 
 const TaskItem = ({
   task,
   handleCheckboxClick,
-  handleTasksDeleteClick,
+  onDeleteSuccess,
 }: TaskItemProps) => {
+  const [deleteTaskisLoading, setDeleteTaskisLoading] = useState(false);
+
+  const handleDeleteTaskClick = async () => {
+    setDeleteTaskisLoading(true);
+    const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      setDeleteTaskisLoading(false);
+      return toast.error("Erro ao deletar tarefa. Por favor, tente novamente.");
+    }
+
+    onDeleteSuccess(task.id);
+    setDeleteTaskisLoading(false);
+  };
+
   const getStatusClasses = () => {
     if (task.status == "done") {
       return "bg-brand-primary text-brand-primary";
@@ -60,8 +81,17 @@ const TaskItem = ({
       </div>
 
       <div className="flex items-center justify-center gap-2">
-        <Button color="ghost" onClick={() => handleTasksDeleteClick!(task.id)}>
-          <TrashIcon className="text-brand-text-gray" />
+        <Button
+          color="ghost"
+          onClick={() => {
+            handleDeleteTaskClick();
+          }}
+        >
+          {deleteTaskisLoading ? (
+            <LoaderIcon className="animate-spin text-brand-dark-gray" />
+          ) : (
+            <TrashIcon className="text-brand-text-gray" />
+          )}
         </Button>
 
         <a href="#" className="transition hover:opacity-75">

@@ -29,17 +29,17 @@
       "status": "in_progress"
     },
     {
-      "id": "ec9357fe-62ee-4cff-b461-0645338a731a",
-      "title": "Teste de performance",
-      "description": "Executar testes para avaliar o desempenho da aplicação",
-      "time": "morning",
-      "status": "not_started"
-    },
-    {
       "id": "e7542d79-f1a3-4068-a465-f2fedb408500",
       "title": "Escrever documentação SAIA",
       "description": "Criar documentação detalhada para as novas features",
       "time": "evening",
+      "status": "in_progress"
+    },
+    {
+      "id": "0a046a58-100d-4747-a9df-58468daaf3a3",
+      "title": "Test",
+      "time": "morning",
+      "description": "Testing",
       "status": "in_progress"
     }
   ]
