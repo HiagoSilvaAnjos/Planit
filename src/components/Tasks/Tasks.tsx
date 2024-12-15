@@ -80,7 +80,17 @@ const Tasks = () => {
     setTasks(newTasks);
   };
 
-  const handleAddTask = (task: TaskProps) => {
+  const handleAddTask = async (task: TaskProps) => {
+    const response = await fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      body: JSON.stringify(task),
+    });
+
+    if (!response.ok)
+      return toast.error(
+        "Erro ao adicionar tarefa. Por favor, tente novamente."
+      );
+
     toast.success("Tarefa concluída com sucesso!");
     setTasks([...tasks, task]);
   };
