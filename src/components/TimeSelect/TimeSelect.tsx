@@ -1,5 +1,6 @@
 import { SelectHTMLAttributes } from "react";
 import InputLabel from "../InputLabel/InputLabel";
+import InputErrorMessage from "../InputErrorMessage/InputErrorMessage";
 
 interface TimeSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   error?: {
@@ -20,9 +21,7 @@ const TimeSelect = ({ error, ...rest }: TimeSelectProps) => {
         <option value="afternoon">Tarde</option>
         <option value="evening">Noite</option>
       </select>
-      {error && (
-        <p className="text-left text-sm text-red-500">{error.message}</p>
-      )}
+      {error && <InputErrorMessage>{error.message}</InputErrorMessage>}
     </div>
   );
 };

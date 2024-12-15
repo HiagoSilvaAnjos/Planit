@@ -1,3 +1,4 @@
+import InputErrorMessage from "../InputErrorMessage/InputErrorMessage";
 import InputLabel from "../InputLabel/InputLabel";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -17,9 +18,7 @@ const Input = ({ label, error, ...rest }: InputProps) => {
         type="text"
         {...rest}
       />
-      {error && (
-        <p className="text-left text-sm text-red-500">{error.message}</p>
-      )}
+      {error && <InputErrorMessage>{error.message}</InputErrorMessage>}
     </div>
   );
 };
