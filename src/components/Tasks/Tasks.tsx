@@ -22,6 +22,7 @@ interface TaskProps {
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);
+
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
 
   useEffect(() => {
@@ -52,6 +53,10 @@ const Tasks = () => {
     toast.success("Tarefa removida com sucesso!");
   };
 
+  const onDeleteTaskError = () => {
+    return toast.error("Erro ao deletar tarefa. Por favor, tente novamente.");
+  };
+
   const handleCheckboxClick = (taskID: string) => {
     const newTasks = tasks.map((task) => {
       if (task.id !== taskID) return task;
@@ -80,19 +85,13 @@ const Tasks = () => {
     setTasks(newTasks);
   };
 
-  const handleAddTask = async (task: TaskProps) => {
-    const response = await fetch("http://localhost:3000/tasks", {
-      method: "POST",
-      body: JSON.stringify(task),
-    });
-
-    if (!response.ok)
-      return toast.error(
-        "Erro ao adicionar tarefa. Por favor, tente novamente."
-      );
-
+  const onAddTaskSuccess = (task: TaskProps) => {
     toast.success("Tarefa concluída com sucesso!");
     setTasks([...tasks, task]);
+  };
+
+  const onAddTaskError = () => {
+    toast.error("Erro ao adicionar tarefa. Por favor, tente novamente.");
   };
 
   return (
@@ -117,7 +116,8 @@ const Tasks = () => {
           <AddTaskDialog
             isOpen={addTaskDialogIsOpen}
             DialogClose={handleDialogClose}
-            HandleSubmit={handleAddTask}
+            AddTaskSuccess={onAddTaskSuccess}
+            AddTaskError={onAddTaskError}
           />
         </div>
       </div>
@@ -131,6 +131,7 @@ const Tasks = () => {
               task={task}
               handleCheckboxClick={handleCheckboxClick}
               onDeleteSuccess={onDeleteTaskSuccess}
+              onDeleteError={onDeleteTaskError}
             />
           ))}
         </div>
@@ -143,6 +144,7 @@ const Tasks = () => {
               task={task}
               handleCheckboxClick={handleCheckboxClick}
               onDeleteSuccess={onDeleteTaskSuccess}
+              onDeleteError={onDeleteTaskError}
             />
           ))}
         </div>
@@ -155,6 +157,7 @@ const Tasks = () => {
               task={task}
               handleCheckboxClick={handleCheckboxClick}
               onDeleteSuccess={onDeleteTaskSuccess}
+              onDeleteError={onDeleteTaskError}
             />
           ))}
         </div>

@@ -6,10 +6,12 @@ import "./AddTaskDialog.css";
 import { useRef, useState } from "react";
 import Select from "../TimeSelect/TimeSelect";
 import { v4 as uuidv4 } from "uuid";
+import { LoaderIcon } from "../../assets/IconsComponents";
 interface AddTaskDialogProps {
   isOpen: boolean;
   DialogClose: () => void;
-  HandleSubmit: (task: {
+  AddTaskError: () => void;
+  AddTaskSuccess: (task: {
     id: string;
     title: string;
     description: string;
@@ -26,7 +28,8 @@ interface errosProps {
 const AddTaskDialog = ({
   isOpen,
   DialogClose,
-  HandleSubmit,
+  AddTaskSuccess,
+  AddTaskError,
 }: AddTaskDialogProps) => {
   const nodeRef = useRef<HTMLDivElement | null>(null);
   const [title, setTitle] = useState<string>("");
@@ -35,20 +38,15 @@ const AddTaskDialog = ({
   );
   const [description, setDescription] = useState<string>("");
   const [errors, setErrors] = useState<errosProps[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     const newErrors = [];
+
     if (!title.trim()) {
       newErrors.push({
         InputName: "title",
         message: "Título é obrigatório",
-      });
-    }
-
-    if (!time.trim()) {
-      newErrors.push({
-        InputName: "time",
-        message: "Horário é obrigatório",
       });
     }
 
@@ -66,17 +64,32 @@ const AddTaskDialog = ({
 
     setErrors([]);
 
-    HandleSubmit({
+    const newTask = {
       id: uuidv4(),
       title,
       time,
       description,
-      status: "in_progress",
+      status: "not_started" as const,
+    };
+
+    setIsLoading(true);
+    const response = await fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTask),
     });
+
+    if (!response.ok) {
+      setIsLoading(false);
+      return AddTaskError();
+    }
+
+    AddTaskSuccess(newTask);
 
     setTitle("");
     setTime("morning");
     setDescription("");
+    setIsLoading(false);
     DialogClose();
   };
 
@@ -150,11 +163,18 @@ const AddTaskDialog = ({
                     Cancelar
                   </Button>
                   <Button
-                    onClick={handleSaveClick}
+                    onClick={() => {
+                      handleSaveClick();
+                    }}
                     className="w-full"
                     size="large"
+                    disabled={isLoading}
                   >
-                    Salvar
+                    {isLoading ? (
+                      <LoaderIcon className="animate-spin text-brand-white" />
+                    ) : (
+                      "Salvar"
+                    )}
                   </Button>
                 </div>
               </div>

@@ -6,7 +6,6 @@ import {
   TrashIcon,
 } from "../../assets/IconsComponents";
 import Button from "../Button/Button";
-import { toast } from "sonner";
 
 export interface Task {
   id: string;
@@ -20,16 +19,20 @@ export interface TaskItemProps {
   task: Task;
   handleCheckboxClick?: (id: string) => void;
   onDeleteSuccess: (taskId: string) => void;
+  onDeleteError: () => void;
 }
 
 const TaskItem = ({
   task,
   handleCheckboxClick,
   onDeleteSuccess,
+  onDeleteError,
 }: TaskItemProps) => {
   const [deleteTaskisLoading, setDeleteTaskisLoading] = useState(false);
 
   const handleDeleteTaskClick = async () => {
+    console.log(task);
+
     setDeleteTaskisLoading(true);
     const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
       method: "DELETE",
@@ -37,7 +40,7 @@ const TaskItem = ({
 
     if (!response.ok) {
       setDeleteTaskisLoading(false);
-      return toast.error("Erro ao deletar tarefa. Por favor, tente novamente.");
+      return onDeleteError();
     }
 
     onDeleteSuccess(task.id);
@@ -82,6 +85,7 @@ const TaskItem = ({
 
       <div className="flex items-center justify-center gap-2">
         <Button
+          disabled={deleteTaskisLoading}
           color="ghost"
           onClick={() => {
             handleDeleteTaskClick();
