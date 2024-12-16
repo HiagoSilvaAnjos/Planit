@@ -128,6 +128,7 @@ const AddTaskDialog = ({
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
                   error={titleError}
+                  disabled={isLoading}
                 />
 
                 <Select
@@ -139,6 +140,7 @@ const AddTaskDialog = ({
                   }
                   id="time"
                   error={timeError}
+                  disabled={isLoading}
                 />
 
                 <Input
@@ -148,6 +150,7 @@ const AddTaskDialog = ({
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
                   error={descriptionError}
+                  disabled={isLoading}
                 />
 
                 <div className="flex gap-3">
@@ -159,6 +162,7 @@ const AddTaskDialog = ({
                     className="w-full"
                     color="secondary"
                     size="large"
+                    disabled={isLoading}
                   >
                     Cancelar
                   </Button>
