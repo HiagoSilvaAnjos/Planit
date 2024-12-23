@@ -363,3 +363,44 @@ export const DetailsIcon: React.FC<IconProps> = (props) => {
     </svg>
   );
 };
+
+export const ChevroRightIcon: React.FC<IconProps> = (props) => {
+  return (
+    <svg
+      width="7"
+      height="9"
+      viewBox="0 0 4 7"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M0.5 6.5L3.5 3.5L0.5 0.5"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const ArrowLeftIcon: React.FC<IconProps> = (props) => {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M6.99984 12.8333L1.1665 6.99999M1.1665 6.99999L6.99984 1.16666M1.1665 6.99999H12.8332"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};

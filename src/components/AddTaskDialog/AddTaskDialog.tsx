@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 import { CSSTransition } from "react-transition-group";
 import "./AddTaskDialog.css";
 import { useRef, useState } from "react";
-import Select from "../TimeSelect/TimeSelect";
+import TimeSelect from "../TimeSelect/TimeSelect";
 import { v4 as uuidv4 } from "uuid";
 import { LoaderIcon } from "../../assets/IconsComponents";
 interface AddTaskDialogProps {
@@ -131,7 +131,7 @@ const AddTaskDialog = ({
                   disabled={isLoading}
                 />
 
-                <Select
+                <TimeSelect
                   value={time}
                   onChange={(event) =>
                     setTime(
