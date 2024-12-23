@@ -6,6 +6,7 @@ import {
   TrashIcon,
 } from "../../assets/IconsComponents";
 import Button from "../Button/Button";
+import { Link } from "react-router-dom";
 
 export interface Task {
   id: string;
@@ -31,8 +32,6 @@ const TaskItem = ({
   const [deleteTaskisLoading, setDeleteTaskisLoading] = useState(false);
 
   const handleDeleteTaskClick = async () => {
-    console.log(task);
-
     setDeleteTaskisLoading(true);
     const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
       method: "DELETE",
@@ -98,9 +97,9 @@ const TaskItem = ({
           )}
         </Button>
 
-        <a href="#" className="transition hover:opacity-75">
+        <Link to={`/task/${task.id}`} className="transition hover:opacity-75">
           <DetailsIcon />
-        </a>
+        </Link>
       </div>
     </div>
   );
