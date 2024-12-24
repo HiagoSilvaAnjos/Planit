@@ -203,8 +203,8 @@ const TaskDetails = () => {
           </div>
           <div>
             <Input
-              label="Nome"
-              id="Nome"
+              label="Descrição"
+              id="Descrição"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               error={descriptionError}
