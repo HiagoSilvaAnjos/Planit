@@ -127,7 +127,7 @@ const AddTaskDialog = ({
                   placeholder={"Insira o título da tarefa"}
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
-                  error={titleError}
+                  errorMessage={titleError?.message}
                   disabled={isLoading}
                 />
 
@@ -139,7 +139,7 @@ const AddTaskDialog = ({
                     )
                   }
                   id="time"
-                  error={timeError}
+                  errorMessage={timeError?.message}
                   disabled={isLoading}
                 />
 
@@ -149,7 +149,7 @@ const AddTaskDialog = ({
                   placeholder={"Descreva a tarefa"}
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
-                  error={descriptionError}
+                  errorMessage={descriptionError?.message}
                   disabled={isLoading}
                 />
 
