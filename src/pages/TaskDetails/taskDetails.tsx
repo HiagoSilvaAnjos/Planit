@@ -150,7 +150,7 @@ const TaskDetails = () => {
                   validate: (value) =>
                     value.trim() ? true : "Título não pode estar vazio!",
                 })}
-                errorMessage={errors?.title?.message?.toString()}
+                errorMessage={errors?.title?.message}
               />
             </div>
             <div>
@@ -159,7 +159,7 @@ const TaskDetails = () => {
                 {...register("time", {
                   required: "Horário é obrigatório",
                 })}
-                errorMessage={errors?.time?.message?.toString()}
+                errorMessage={errors?.time?.message}
               />
             </div>
             <div>
@@ -171,7 +171,7 @@ const TaskDetails = () => {
                   validate: (value) =>
                     value.trim() ? true : "Descrição não pode estar vazia!",
                 })}
-                errorMessage={errors?.description?.message?.toString()}
+                errorMessage={errors?.description?.message}
               />
             </div>
           </div>

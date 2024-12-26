@@ -3,10 +3,11 @@ import Input from "../Input/Input";
 import Button from "../Button/Button";
 import { CSSTransition } from "react-transition-group";
 import "./AddTaskDialog.css";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import TimeSelect from "../TimeSelect/TimeSelect";
 import { v4 as uuidv4 } from "uuid";
 import { LoaderIcon } from "../../assets/IconsComponents";
+import { useForm } from "react-hook-form";
 interface AddTaskDialogProps {
   isOpen: boolean;
   DialogClose: () => void;
@@ -19,12 +20,11 @@ interface AddTaskDialogProps {
     status: "not_started" | "in_progress" | "done";
   }) => void;
 }
-
-interface errosProps {
-  InputName: string;
-  message: string;
+interface FormData {
+  title: string;
+  time: "morning" | "afternoon" | "evening";
+  description: string;
 }
-
 const AddTaskDialog = ({
   isOpen,
   DialogClose,
@@ -32,47 +32,23 @@ const AddTaskDialog = ({
   AddTaskError,
 }: AddTaskDialogProps) => {
   const nodeRef = useRef<HTMLDivElement | null>(null);
-  const [title, setTitle] = useState<string>("");
-  const [time, setTime] = useState<"morning" | "afternoon" | "evening">(
-    "morning"
-  );
-  const [description, setDescription] = useState<string>("");
-  const [errors, setErrors] = useState<errosProps[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSaveClick = async () => {
-    const newErrors = [];
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>();
 
-    if (!title.trim()) {
-      newErrors.push({
-        InputName: "title",
-        message: "Título é obrigatório",
-      });
-    }
-
-    if (!description.trim()) {
-      newErrors.push({
-        InputName: "description",
-        message: "Descrição é obrigatório",
-      });
-    }
-
-    if (newErrors.length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    setErrors([]);
-
+  const handleSaveClick = async (data: FormData) => {
     const newTask = {
       id: uuidv4(),
-      title,
-      time,
-      description,
+      title: data.title,
+      time: data.time,
+      description: data.description,
       status: "not_started" as const,
     };
 
-    setIsLoading(true);
     const response = await fetch("http://localhost:3000/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -80,24 +56,18 @@ const AddTaskDialog = ({
     });
 
     if (!response.ok) {
-      setIsLoading(false);
       return AddTaskError();
     }
 
     AddTaskSuccess(newTask);
+    reset({
+      title: "",
+      time: "morning",
+      description: "",
+    });
 
-    setTitle("");
-    setTime("morning");
-    setDescription("");
-    setIsLoading(false);
     DialogClose();
   };
-
-  const titleError = errors.find((error) => error.InputName === "title");
-  const timeError = errors.find((error) => error.InputName === "time");
-  const descriptionError = errors.find(
-    (error) => error.InputName === "description"
-  );
 
   return (
     <CSSTransition
@@ -120,68 +90,76 @@ const AddTaskDialog = ({
               <p className="mb-4 mt-1 text-brand-text-gray">
                 Insira as informações abaixo
               </p>
-              <div className="flex w-[336px] flex-col space-y-4">
-                <Input
-                  id="title"
-                  label="Título"
-                  placeholder={"Insira o título da tarefa"}
-                  value={title}
-                  onChange={(event) => setTitle(event.target.value)}
-                  errorMessage={titleError?.message}
-                  disabled={isLoading}
-                />
+              <form onSubmit={handleSubmit(handleSaveClick)}>
+                <div className="flex w-[336px] flex-col space-y-4">
+                  <Input
+                    id="title"
+                    label="Título"
+                    placeholder={"Insira o título da tarefa"}
+                    {...register("title", {
+                      required: "Título é obrigatório",
+                      validate: (value) =>
+                        value.trim() ? true : "Título não pode estar vazio!",
+                    })}
+                    errorMessage={errors.title?.message}
+                    disabled={isSubmitting}
+                  />
 
-                <TimeSelect
-                  value={time}
-                  onChange={(event) =>
-                    setTime(
-                      event.target.value as "morning" | "afternoon" | "evening"
-                    )
-                  }
-                  id="time"
-                  errorMessage={timeError?.message}
-                  disabled={isLoading}
-                />
+                  <TimeSelect
+                    id="time"
+                    {...register("time", {
+                      required: "Horário é obrigatório",
+                    })}
+                    errorMessage={errors.time?.message}
+                    disabled={isSubmitting}
+                  />
 
-                <Input
-                  id="description"
-                  label="Descrição"
-                  placeholder={"Descreva a tarefa"}
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
-                  errorMessage={descriptionError?.message}
-                  disabled={isLoading}
-                />
+                  <Input
+                    id="description"
+                    label="Descrição"
+                    placeholder={"Descreva a tarefa"}
+                    {...register("description", {
+                      required: "Descrição é obrigatória",
+                      validate: (value) =>
+                        value.trim() ? true : "Descrição não pode estar vazia!",
+                    })}
+                    errorMessage={errors.description?.message}
+                    disabled={isSubmitting}
+                  />
 
-                <div className="flex gap-3">
-                  <Button
-                    onClick={() => {
-                      DialogClose();
-                      setErrors([]);
-                    }}
-                    className="w-full"
-                    color="secondary"
-                    size="large"
-                    disabled={isLoading}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleSaveClick();
-                    }}
-                    className="w-full"
-                    size="large"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <LoaderIcon className="animate-spin text-brand-white" />
-                    ) : (
-                      "Salvar"
-                    )}
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => {
+                        DialogClose();
+                        reset({
+                          title: "",
+                          time: "morning",
+                          description: "",
+                        });
+                      }}
+                      className="w-full"
+                      color="secondary"
+                      size="large"
+                      disabled={isSubmitting}
+                      type="button"
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      className="w-full"
+                      size="large"
+                      disabled={isSubmitting}
+                      type="submit"
+                    >
+                      {isSubmitting ? (
+                        <LoaderIcon className="animate-spin text-brand-white" />
+                      ) : (
+                        "Salvar"
+                      )}
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>,
           document.body
