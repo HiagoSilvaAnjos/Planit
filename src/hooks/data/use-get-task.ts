@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { TaskProps } from "../../interfaces/interfaces";
+import { api } from "../../lib/axios";
 
 export const useGetTask = (
   taskId: string,
@@ -8,17 +9,8 @@ export const useGetTask = (
   return useQuery<TaskProps>({
     queryKey: ["task", taskId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch task data");
-      }
-
-      const taskData: TaskProps = await response.json();
+      const { data: taskData } = await api.get(`/tasks/${taskId}`);
       onSuccess(taskData);
-
       return taskData;
     },
   });
