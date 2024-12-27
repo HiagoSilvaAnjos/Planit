@@ -14,12 +14,7 @@ import { useForm } from "react-hook-form";
 import { useGetTask } from "../../hooks/data/use-get-task";
 import { useUpdateTask } from "../../hooks/data/use-update-task";
 import { useDeleteTask } from "../../hooks/data/use-delete-task";
-
-interface FormData {
-  title: string;
-  time: "morning" | "afternoon" | "evening";
-  description: string;
-}
+import { FormDataProps } from "../../interfaces/interfaces";
 
 const TaskDetails = () => {
   const navigate = useNavigate();
@@ -30,7 +25,7 @@ const TaskDetails = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormDataProps>();
 
   const handleBackClick = () => {
     navigate("/");
@@ -50,7 +45,7 @@ const TaskDetails = () => {
   const { mutate: deleteTask, isPending: deleteTaskIsPending } =
     useDeleteTask(validTaskId);
 
-  const handleSaveClick = async (data: FormData) => {
+  const handleSaveClick = async (data: FormDataProps) => {
     updateTask(data, {
       onSuccess: () => {
         toast.success("Tarefa salva com sucesso!");

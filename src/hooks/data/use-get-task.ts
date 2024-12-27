@@ -1,18 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-
-interface TaskData {
-  id: string;
-  title: string;
-  time: "morning" | "afternoon" | "evening";
-  description: string;
-  status: "not_started" | "in_progress" | "done";
-}
+import { TaskProps } from "../../interfaces/interfaces";
 
 export const useGetTask = (
   taskId: string,
-  onSuccess: (data: TaskData) => void
+  onSuccess: (data: TaskProps) => void
 ) => {
-  return useQuery<TaskData>({
+  return useQuery<TaskProps>({
     queryKey: ["task", taskId],
     queryFn: async () => {
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
@@ -23,7 +16,7 @@ export const useGetTask = (
         throw new Error("Failed to fetch task data");
       }
 
-      const taskData: TaskData = await response.json();
+      const taskData: TaskProps = await response.json();
       onSuccess(taskData);
 
       return taskData;

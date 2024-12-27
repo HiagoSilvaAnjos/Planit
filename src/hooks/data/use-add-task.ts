@@ -1,17 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { TaskProps } from "../../interfaces/interfaces";
 
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  time: "morning" | "afternoon" | "evening";
-  status: "not_started" | "in_progress" | "done";
-}
 export const useAddTask = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["addTask"],
-    mutationFn: async (newTask: Task) => {
+    mutationFn: async (newTask: TaskProps) => {
       const response = await fetch("http://localhost:3000/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -25,7 +19,7 @@ export const useAddTask = () => {
       return newTask;
     },
     onSuccess: (newTask) => {
-      queryClient.setQueryData(["tasks"], (currentTasks: Task[]) => {
+      queryClient.setQueryData(["tasks"], (currentTasks: TaskProps[]) => {
         return [...currentTasks, newTask];
       });
     },

@@ -1,12 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { TaskProps } from "../../interfaces/interfaces";
 
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  time: "morning" | "afternoon" | "evening";
-  status: "not_started" | "in_progress" | "done";
-}
 export const useDeleteTask = (taskId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -25,7 +19,7 @@ export const useDeleteTask = (taskId: string) => {
       return taskDeleted;
     },
     onSuccess: (taskDeleted) => {
-      queryClient.setQueryData(["tasks"], (currentTasks: Task[]) => {
+      queryClient.setQueryData(["tasks"], (currentTasks: TaskProps[]) => {
         return currentTasks.filter((oldTask) => oldTask.id !== taskDeleted.id);
       });
     },

@@ -13,14 +13,7 @@ import { toast } from "sonner";
 import AddTaskDialog from "../AddTaskDialog/AddTaskDialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetTasks } from "../../hooks/data/use-get-tasks";
-
-interface TaskProps {
-  id: string;
-  title: string;
-  description: string;
-  time: "morning" | "afternoon" | "evening";
-  status: "not_started" | "in_progress" | "done";
-}
+import { TaskProps } from "../../interfaces/interfaces";
 
 const Tasks = () => {
   const queryClient = useQueryClient();

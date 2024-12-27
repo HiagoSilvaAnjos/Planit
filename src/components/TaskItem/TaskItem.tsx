@@ -8,17 +8,10 @@ import Button from "../Button/Button";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useDeleteTask } from "../../hooks/data/use-delete-task";
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  time: "morning" | "afternoon" | "evening";
-  status: "not_started" | "in_progress" | "done";
-}
+import { TaskProps } from "../../interfaces/interfaces";
 
 export interface TaskItemProps {
-  task: Task;
+  task: TaskProps;
   handleCheckboxClick?: (id: string) => void;
 }
 

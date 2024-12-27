@@ -10,14 +10,10 @@ import { LoaderIcon } from "../../assets/IconsComponents";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useAddTask } from "../../hooks/data/use-add-task";
+import { FormDataProps } from "../../interfaces/interfaces";
 interface AddTaskDialogProps {
   isOpen: boolean;
   DialogClose: () => void;
-}
-interface FormData {
-  title: string;
-  time: "morning" | "afternoon" | "evening";
-  description: string;
 }
 
 const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
@@ -28,11 +24,11 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormDataProps>();
 
   const { mutate: addTask, isPending } = useAddTask();
 
-  const handleSaveClick = async (data: FormData) => {
+  const handleSaveClick = async (data: FormDataProps) => {
     const newTask = {
       id: uuidv4(),
       title: data.title,

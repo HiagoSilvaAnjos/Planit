@@ -1,24 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  time: "morning" | "afternoon" | "evening";
-  status: "not_started" | "in_progress" | "done";
-}
-
-interface FormData {
-  title: string;
-  time: "morning" | "afternoon" | "evening";
-  description: string;
-}
+import { FormDataProps, TaskProps } from "../../interfaces/interfaces";
 
 export const useUpdateTask = (taskId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["updateTask", taskId],
-    mutationFn: async (newTask: FormData) => {
+    mutationFn: async (newTask: FormDataProps) => {
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -33,7 +20,7 @@ export const useUpdateTask = (taskId: string) => {
         throw new Error();
       }
       const updatedTask = await response.json();
-      queryClient.setQueryData(["tasks"], (currentTasks: Task[]) => {
+      queryClient.setQueryData(["tasks"], (currentTasks: TaskProps[]) => {
         currentTasks.map((task) => {
           if (task.id === taskId) {
             return updatedTask;
