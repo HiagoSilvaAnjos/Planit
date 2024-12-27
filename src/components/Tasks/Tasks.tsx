@@ -113,6 +113,24 @@ const Tasks = () => {
     toast.error("Erro ao adicionar tarefa. Por favor, tente novamente.");
   };
 
+  const handleClearTasks = async () => {
+    if (!tasks || tasks.length === 0)
+      return toast.error("Não há tarefas para remover!");
+    try {
+      for (const task of tasks) {
+        await fetch(`http://localhost:3000/tasks/${task.id}`, {
+          method: "DELETE",
+        });
+      }
+
+      queryClient.setQueryData(["tasks"], []); // Atualiza o cache local
+      toast.success("Tarefas removidas com sucesso!");
+    } catch (error) {
+      console.log(error);
+      toast.error("Erro ao remover tarefas. Por favor, tente novamente.");
+    }
+  };
+
   return (
     <div className="space-y- w-full space-y-4 px-8 py-16">
       <div className="flex w-full justify-between">
@@ -123,7 +141,12 @@ const Tasks = () => {
           <p className="text-xl font-semibold">Minhas Tarefas</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button color="ghost">
+          <Button
+            color="ghost"
+            onClick={() => {
+              handleClearTasks();
+            }}
+          >
             Limpar Tarefas
             <TrashIcon />
           </Button>
