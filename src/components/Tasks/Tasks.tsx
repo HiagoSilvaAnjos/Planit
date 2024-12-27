@@ -11,7 +11,8 @@ import TasksSeparator from "../TasksSeparator/TasksSeparator";
 import TaskItem from "../TaskItem/TaskItem";
 import { toast } from "sonner";
 import AddTaskDialog from "../AddTaskDialog/AddTaskDialog";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGetTasks } from "../../hooks/data/use-get-tasks";
 
 interface TaskProps {
   id: string;
@@ -23,18 +24,7 @@ interface TaskProps {
 
 const Tasks = () => {
   const queryClient = useQueryClient();
-  const { data: tasks } = useQuery({
-    queryKey: ["tasks"], // IDENTIFICADO ÚNICO DA QUERY
-    queryFn: async () => {
-      // FUNÇÃO QUE SERÁ EXECUTADA	ASSIM QUE A QUERY FOR CHAMADA
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "GET",
-      });
-
-      const tasks = await response.json();
-      return tasks;
-    },
-  });
+  const { data: tasks } = useGetTasks();
 
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
 

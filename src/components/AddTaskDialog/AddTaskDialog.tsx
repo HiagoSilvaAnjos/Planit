@@ -8,8 +8,8 @@ import TimeSelect from "../TimeSelect/TimeSelect";
 import { v4 as uuidv4 } from "uuid";
 import { LoaderIcon } from "../../assets/IconsComponents";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useAddTask } from "../../hooks/data/use-add-task";
 interface AddTaskDialogProps {
   isOpen: boolean;
   DialogClose: () => void;
@@ -20,13 +20,6 @@ interface FormData {
   description: string;
 }
 
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  time: "morning" | "afternoon" | "evening";
-  status: "not_started" | "in_progress" | "done";
-}
 const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
   const nodeRef = useRef<HTMLDivElement | null>(null);
 
@@ -37,23 +30,7 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["addTask"],
-    mutationFn: async (newTask: Task) => {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTask),
-      });
-
-      if (!response.ok) {
-        throw new Error();
-      }
-
-      return newTask;
-    },
-  });
+  const { mutate: addTask, isPending } = useAddTask();
 
   const handleSaveClick = async (data: FormData) => {
     const newTask = {
@@ -64,11 +41,8 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
       status: "not_started" as const,
     };
 
-    mutate(newTask, {
-      onSuccess: (newTask) => {
-        queryClient.setQueryData(["tasks"], (currentTasks: Task[]) => {
-          return [...currentTasks, newTask];
-        });
+    addTask(newTask, {
+      onSuccess: () => {
         toast.success("Tarefa Adicionada com sucesso!");
         reset({
           title: "",
