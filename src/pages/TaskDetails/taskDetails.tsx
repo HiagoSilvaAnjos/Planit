@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import {
@@ -12,6 +11,7 @@ import Input from "../../components/Input/Input";
 import TimeSelect from "../../components/TimeSelect/TimeSelect";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface TaskProps {
   id: string;
@@ -20,86 +20,121 @@ interface TaskProps {
   time: "morning" | "afternoon" | "evening";
   status: "not_started" | "in_progress" | "done";
 }
+interface FormData {
+  title: string;
+  time: "morning" | "afternoon" | "evening";
+  description: string;
+}
 
 const TaskDetails = () => {
-  const [task, setTask] = useState<TaskProps>();
-  const [deleteIsLoading, setDeleteTaskisLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { taskId } = useParams();
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormData>();
-
-  interface FormData {
-    title: string;
-    time: "morning" | "afternoon" | "evening";
-    description: string;
-  }
 
   const handleBackClick = () => {
     navigate(-1);
   };
 
-  const handleSaveClick = async (data: FormData) => {
-    console.log(data);
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: data.title.trim(),
-        time: data.time,
-        description: data.description.trim(),
-      }),
-    });
+  const queryClient = useQueryClient();
 
-    if (!response.ok) {
-      return toast.error("Erro ao salvar tarefa. Por favor, tente novamente.");
-    }
-
-    const newTask: TaskProps = await response.json();
-    setTask(newTask);
-    toast.success("Tarefa salva com sucesso!");
-  };
-
-  const handleDeleteTaskClick = async () => {
-    setDeleteTaskisLoading(true);
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: "DELETE",
-    });
-
-    if (!response.ok) {
-      setDeleteTaskisLoading(false);
-      return toast.error("Erro ao deletar tarefa. Por favor, tente novamente.");
-    }
-
-    toast.success("Tarefa deletada com sucesso!");
-    navigate("/");
-    setDeleteTaskisLoading(false);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
+  const { data: task } = useQuery({
+    queryKey: ["task", taskId],
+    queryFn: async () => {
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: "GET",
       });
+
       const taskData = await response.json();
-      setTask(taskData);
       reset({
         title: taskData.title,
         time: taskData.time,
         description: taskData.description,
       });
-    };
 
-    fetchData();
-  }, [taskId, reset]);
+      return taskData;
+    },
+  });
+
+  const { mutate: updateTask, isPending: updateTaskIsPending } = useMutation({
+    mutationKey: ["updateTask", taskId],
+    mutationFn: async (newTask: FormData) => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: newTask.title,
+          time: newTask.time,
+          description: newTask.description,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      const updatedTask = await response.json();
+      queryClient.setQueryData(["tasks"], (currentTasks: TaskProps[]) => {
+        currentTasks.map((task) => {
+          if (task.id === taskId) {
+            return updatedTask;
+          }
+          return task;
+        });
+      });
+    },
+  });
+
+  const { mutate: deleteTask, isPending: deleteTaskIsPending } = useMutation({
+    mutationKey: ["deleteTask", taskId],
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      const taskDeleted = await response.json();
+      queryClient.setQueryData(["tasks"], (currentTasks: TaskProps[]) => {
+        return currentTasks.filter((oldTask) => oldTask.id !== taskDeleted.id);
+      });
+    },
+  });
+
+  const handleSaveClick = async (data: FormData) => {
+    updateTask(data, {
+      onSuccess: () => {
+        toast.success("Tarefa salva com sucesso!");
+        queryClient.setQueryData(["task", taskId], data);
+      },
+      onError: () => {
+        toast.error("Erro ao salvar tarefa. Por favor, tente novamente.");
+      },
+    });
+  };
+
+  const handleDeleteTaskClick = async () => {
+    deleteTask(undefined, {
+      onSuccess: () => {
+        toast.success("Tarefa deletada com sucesso!");
+        navigate("/");
+      },
+      onError: () => {
+        toast.error("Erro ao deletar tarefa. Por favor, tente novamente.");
+      },
+    });
+  };
 
   return (
     <div className="flex">
       <Sidebar />
+
       <div className="w-full space-y-6 px-8 py-16">
         <div className="flex w-full items-center justify-between">
           <div>
@@ -127,9 +162,9 @@ const TaskDetails = () => {
             type="submit"
             color="danger"
             className="w-[150px] self-end"
-            disabled={deleteIsLoading}
+            disabled={deleteTaskIsPending || updateTaskIsPending}
           >
-            {deleteIsLoading ? (
+            {deleteTaskIsPending ? (
               <LoaderIcon className="animate-spin text-brand-white" />
             ) : (
               <>
@@ -179,11 +214,11 @@ const TaskDetails = () => {
             <Button
               size={"large"}
               color="primary"
-              disabled={isSubmitting}
+              disabled={updateTaskIsPending || deleteTaskIsPending}
               className="w-[150px]"
               type="submit"
             >
-              {isSubmitting ? (
+              {updateTaskIsPending ? (
                 <LoaderIcon className="animate-spin text-brand-white" />
               ) : (
                 "Salvar"

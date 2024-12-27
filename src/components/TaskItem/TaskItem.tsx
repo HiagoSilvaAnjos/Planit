@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   CheckIcon,
   DetailsIcon,
@@ -7,6 +6,8 @@ import {
 } from "../../assets/IconsComponents";
 import Button from "../Button/Button";
 import { Link } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export interface Task {
   id: string;
@@ -19,31 +20,35 @@ export interface Task {
 export interface TaskItemProps {
   task: Task;
   handleCheckboxClick?: (id: string) => void;
-  onDeleteSuccess: (taskId: string) => void;
-  onDeleteError: () => void;
 }
 
-const TaskItem = ({
-  task,
-  handleCheckboxClick,
-  onDeleteSuccess,
-  onDeleteError,
-}: TaskItemProps) => {
-  const [deleteTaskisLoading, setDeleteTaskisLoading] = useState(false);
+const TaskItem = ({ task, handleCheckboxClick }: TaskItemProps) => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["deleteTask", task.id],
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+    },
+  });
 
   const handleDeleteTaskClick = async () => {
-    setDeleteTaskisLoading(true);
-    const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
-      method: "DELETE",
+    mutate(undefined, {
+      onSuccess: () => {
+        queryClient.setQueryData(["tasks"], (currentTasks: Task[]) => {
+          return currentTasks.filter((oldTask) => oldTask.id !== task.id);
+        });
+        toast.success("Tarefa removida com sucesso!");
+      },
+      onError: () => {
+        toast.error("Erro ao deletar tarefa. Por favor, tente novamente.");
+      },
     });
-
-    if (!response.ok) {
-      setDeleteTaskisLoading(false);
-      return onDeleteError();
-    }
-
-    onDeleteSuccess(task.id);
-    setDeleteTaskisLoading(false);
   };
 
   const getStatusClasses = () => {
@@ -84,13 +89,13 @@ const TaskItem = ({
 
       <div className="flex items-center justify-center gap-2">
         <Button
-          disabled={deleteTaskisLoading}
+          disabled={isPending}
           color="ghost"
           onClick={() => {
             handleDeleteTaskClick();
           }}
         >
-          {deleteTaskisLoading ? (
+          {isPending ? (
             <LoaderIcon className="animate-spin text-brand-dark-gray" />
           ) : (
             <TrashIcon className="text-brand-text-gray" />

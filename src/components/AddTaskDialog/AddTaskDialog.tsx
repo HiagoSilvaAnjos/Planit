@@ -8,37 +8,52 @@ import TimeSelect from "../TimeSelect/TimeSelect";
 import { v4 as uuidv4 } from "uuid";
 import { LoaderIcon } from "../../assets/IconsComponents";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 interface AddTaskDialogProps {
   isOpen: boolean;
   DialogClose: () => void;
-  AddTaskError: () => void;
-  AddTaskSuccess: (task: {
-    id: string;
-    title: string;
-    description: string;
-    time: "morning" | "afternoon" | "evening";
-    status: "not_started" | "in_progress" | "done";
-  }) => void;
 }
 interface FormData {
   title: string;
   time: "morning" | "afternoon" | "evening";
   description: string;
 }
-const AddTaskDialog = ({
-  isOpen,
-  DialogClose,
-  AddTaskSuccess,
-  AddTaskError,
-}: AddTaskDialogProps) => {
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  time: "morning" | "afternoon" | "evening";
+  status: "not_started" | "in_progress" | "done";
+}
+const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
   const nodeRef = useRef<HTMLDivElement | null>(null);
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormData>();
+
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["addTask"],
+    mutationFn: async (newTask: Task) => {
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTask),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      return newTask;
+    },
+  });
 
   const handleSaveClick = async (data: FormData) => {
     const newTask = {
@@ -49,24 +64,23 @@ const AddTaskDialog = ({
       status: "not_started" as const,
     };
 
-    const response = await fetch("http://localhost:3000/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newTask),
+    mutate(newTask, {
+      onSuccess: (newTask) => {
+        queryClient.setQueryData(["tasks"], (currentTasks: Task[]) => {
+          return [...currentTasks, newTask];
+        });
+        toast.success("Tarefa Adicionada com sucesso!");
+        reset({
+          title: "",
+          time: "morning",
+          description: "",
+        });
+        DialogClose();
+      },
+      onError: () => {
+        toast.error("Erro ao adicionar tarefa. Por favor, tente novamente.");
+      },
     });
-
-    if (!response.ok) {
-      return AddTaskError();
-    }
-
-    AddTaskSuccess(newTask);
-    reset({
-      title: "",
-      time: "morning",
-      description: "",
-    });
-
-    DialogClose();
   };
 
   return (
@@ -102,7 +116,7 @@ const AddTaskDialog = ({
                         value.trim() ? true : "Título não pode estar vazio!",
                     })}
                     errorMessage={errors.title?.message}
-                    disabled={isSubmitting}
+                    disabled={isPending}
                   />
 
                   <TimeSelect
@@ -111,7 +125,7 @@ const AddTaskDialog = ({
                       required: "Horário é obrigatório",
                     })}
                     errorMessage={errors.time?.message}
-                    disabled={isSubmitting}
+                    disabled={isPending}
                   />
 
                   <Input
@@ -124,7 +138,7 @@ const AddTaskDialog = ({
                         value.trim() ? true : "Descrição não pode estar vazia!",
                     })}
                     errorMessage={errors.description?.message}
-                    disabled={isSubmitting}
+                    disabled={isPending}
                   />
 
                   <div className="flex gap-3">
@@ -140,7 +154,7 @@ const AddTaskDialog = ({
                       className="w-full"
                       color="secondary"
                       size="large"
-                      disabled={isSubmitting}
+                      disabled={isPending}
                       type="button"
                     >
                       Cancelar
@@ -148,10 +162,10 @@ const AddTaskDialog = ({
                     <Button
                       className="w-full"
                       size="large"
-                      disabled={isSubmitting}
+                      disabled={isPending}
                       type="submit"
                     >
-                      {isSubmitting ? (
+                      {isPending ? (
                         <LoaderIcon className="animate-spin text-brand-white" />
                       ) : (
                         "Salvar"
