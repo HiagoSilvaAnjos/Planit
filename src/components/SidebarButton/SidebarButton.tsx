@@ -3,9 +3,10 @@ import { tv } from "tailwind-variants";
 interface SidebarButtonProps {
   children: React.ReactNode;
   color: "unselected" | "selected";
+  href: string;
 }
 
-const SidebarButton = ({ children, color }: SidebarButtonProps) => {
+const SidebarButton = ({ children, color, href }: SidebarButtonProps) => {
   const sidebar = tv({
     base: "flex items-center gap-2 rounded-lg px-6 py-3",
     variants: {
@@ -17,7 +18,7 @@ const SidebarButton = ({ children, color }: SidebarButtonProps) => {
   });
 
   return (
-    <a className={`${sidebar({ color })} `} href="#">
+    <a className={`${sidebar({ color })} `} href={href}>
       {children}
     </a>
   );
