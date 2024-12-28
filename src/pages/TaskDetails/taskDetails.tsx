@@ -28,7 +28,7 @@ const TaskDetails = () => {
   } = useForm<FormDataProps>();
 
   const handleBackClick = () => {
-    navigate("/");
+    navigate("/tasks");
   };
 
   const { data: task, isSuccess } = useGetTask(validTaskId, (task) => {
@@ -60,7 +60,7 @@ const TaskDetails = () => {
     deleteTask(undefined, {
       onSuccess: () => {
         toast.success("Tarefa deletada com sucesso!");
-        navigate("/");
+        navigate("/tasks");
       },
       onError: () => {
         toast.error("Erro ao deletar tarefa. Por favor, tente novamente.");
