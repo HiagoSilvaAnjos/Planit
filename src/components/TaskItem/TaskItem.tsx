@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useDeleteTask } from "../../hooks/data/use-delete-task";
 import { TaskProps } from "../../interfaces/interfaces";
 
-export interface TaskItemProps {
+interface TaskItemProps {
   task: TaskProps;
   handleCheckboxClick?: (id: string) => void;
 }

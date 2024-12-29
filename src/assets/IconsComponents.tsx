@@ -17,7 +17,7 @@ export const HomeIcon = () => {
   );
 };
 
-export const TasksIcon = () => {
+export const TasksIcon: React.FC<IconProps> = (props) => {
   return (
     <svg
       width="24"
@@ -25,6 +25,7 @@ export const TasksIcon = () => {
       viewBox="0 0 24 24"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <path
         d="M3 17L5 19L9 15"
@@ -398,6 +399,83 @@ export const ArrowLeftIcon: React.FC<IconProps> = (props) => {
         d="M6.99984 12.8333L1.1665 6.99999M1.1665 6.99999L6.99984 1.16666M1.1665 6.99999H12.8332"
         stroke="white"
         stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const GlassWaterIcon: React.FC<IconProps> = (props) => {
+  return (
+    <svg
+      width="25"
+      height="25"
+      viewBox="0 0 25 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M6.5 12.5C7.36548 11.8509 8.41815 11.5 9.5 11.5C10.5819 11.5 11.6345 11.8509 12.5 12.5C13.3655 13.1491 14.4181 13.5 15.5 13.5C16.5819 13.5 17.6345 13.1491 18.5 12.5M15.7 22.5H9.3C8.80402 22.5027 8.32472 22.3211 7.95514 21.9903C7.58556 21.6595 7.35207 21.2032 7.3 20.71L5.5 3.5H19.5L17.69 20.71C17.6381 21.2015 17.406 21.6564 17.0386 21.987C16.6711 22.3175 16.1943 22.5003 15.7 22.5Z"
+        stroke="#00ADB5"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const TasksTwoIcon: React.FC<IconProps> = (props) => {
+  return (
+    <svg
+      width="24"
+      height="25"
+      viewBox="0 0 24 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M9 3.5H4C3.44772 3.5 3 3.94772 3 4.5V9.5C3 10.0523 3.44772 10.5 4 10.5H9C9.55228 10.5 10 10.0523 10 9.5V4.5C10 3.94772 9.55228 3.5 9 3.5Z"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M9 14.5H4C3.44772 14.5 3 14.9477 3 15.5V20.5C3 21.0523 3.44772 21.5 4 21.5H9C9.55228 21.5 10 21.0523 10 20.5V15.5C10 14.9477 9.55228 14.5 9 14.5Z"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M14 4.5H21"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M14 9.5H21"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M14 15.5H21"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M14 20.5H21"
+        stroke="currentColor"
+        stroke-width="2.2"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
