@@ -122,7 +122,7 @@ const TaskDetails = () => {
                     {...register("title", {
                       required: "Título é obrigatório",
                       validate: (value) =>
-                        value.trim() ? true : "Título não pode estar vazio!",
+                        value!.trim() ? true : "Título não pode estar vazio!",
                     })}
                     errorMessage={errors?.title?.message}
                   />
@@ -143,7 +143,9 @@ const TaskDetails = () => {
                     {...register("description", {
                       required: "Descrição é obrigatória",
                       validate: (value) =>
-                        value.trim() ? true : "Descrição não pode estar vazia!",
+                        value!.trim()
+                          ? true
+                          : "Descrição não pode estar vazia!",
                     })}
                     errorMessage={errors?.description?.message}
                   />

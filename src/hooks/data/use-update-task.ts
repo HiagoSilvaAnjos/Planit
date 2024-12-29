@@ -10,21 +10,16 @@ export const useUpdateTask = (taskId: string) => {
     mutationKey: tasksMutationKeys.updateTask(taskId),
     mutationFn: async (newTask: FormDataProps) => {
       const { data: updatedTask } = await api.patch(`/tasks/${taskId}`, {
-        title: newTask.title,
-        time: newTask.time,
-        description: newTask.description,
+        title: newTask?.title,
+        time: newTask?.time,
+        description: newTask?.description,
+        status: newTask?.status,
       });
 
       queryClient.setQueryData(
         taskQueryKeys.getAllTasks(),
-        (currentTasks: TaskProps[]) => {
-          currentTasks.map((task) => {
-            if (task.id === taskId) {
-              return updatedTask;
-            }
-            return task;
-          });
-        }
+        (currentTasks: TaskProps[]) =>
+          currentTasks?.map((task) => (task.id === taskId ? updatedTask : task))
       );
       queryClient.setQueryData(taskQueryKeys.getOneTask(taskId), updatedTask);
       return updatedTask;

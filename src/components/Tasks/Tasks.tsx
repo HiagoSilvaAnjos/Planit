@@ -1,15 +1,11 @@
 import { CloudSunIcon, MoonIcon, SunIcon } from "../../assets/IconsComponents";
 import TasksSeparator from "../TasksSeparator/TasksSeparator";
 import TaskItem from "../TaskItem/TaskItem";
-import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 import { useGetTasks } from "../../hooks/data/use-get-tasks";
 import { TaskProps } from "../../interfaces/interfaces";
 import Header from "../Header/Header";
-import { taskQueryKeys } from "../../keys/queries";
 
 const Tasks = () => {
-  const queryClient = useQueryClient();
   const { data: tasks } = useGetTasks();
 
   const morningTasks = tasks?.filter(
@@ -21,45 +17,6 @@ const Tasks = () => {
   const eveningTasks = tasks?.filter(
     (task: TaskProps) => task.time == "evening"
   );
-
-  const handleCheckboxClick = async (taskID: string) => {
-    let newStatus: "not_started" | "in_progress" | "done" = "not_started";
-    const newTasks = tasks.map((task: TaskProps) => {
-      if (task.id !== taskID) return task;
-
-      if (task.status === "not_started") {
-        newStatus = "in_progress";
-        toast.success("Tarefa iniciada com sucesso!");
-        return { ...task, status: newStatus };
-      }
-      if (task.status === "in_progress") {
-        newStatus = "done";
-        toast.success("Tarefa concluída com sucesso!");
-        return { ...task, status: newStatus };
-      }
-      if (task.status === "done") {
-        newStatus = "not_started";
-        toast.success("Tarefa retomada com sucesso!");
-        return { ...task, status: newStatus };
-      }
-    });
-
-    const response = await fetch(`http://localhost:3000/tasks/${taskID}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status: newStatus,
-      }),
-    });
-
-    if (!response.ok) {
-      return toast.error(
-        "Erro ao Atualizar tarefa. Por favor, tente novamente."
-      );
-    }
-
-    queryClient.setQueryData(taskQueryKeys.getAllTasks(), newTasks);
-  };
 
   return (
     <div className="space-y- w-full space-y-4 px-8 py-16">
@@ -74,11 +31,7 @@ const Tasks = () => {
             </p>
           )}
           {morningTasks?.map((task: TaskProps) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              handleCheckboxClick={handleCheckboxClick}
-            />
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
 
@@ -90,11 +43,7 @@ const Tasks = () => {
             </p>
           )}
           {afternoonTasks?.map((task: TaskProps) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              handleCheckboxClick={handleCheckboxClick}
-            />
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
 
@@ -106,11 +55,7 @@ const Tasks = () => {
             </p>
           )}
           {eveningTasks?.map((task: TaskProps) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              handleCheckboxClick={handleCheckboxClick}
-            />
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
       </div>

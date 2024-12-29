@@ -13,12 +13,12 @@ import { TaskProps } from "../../interfaces/interfaces";
 const HomePage = () => {
   const { data: Tasks } = useGetTasks();
 
-  const completedTasks = Tasks?.filter(
-    (task: TaskProps) => task.status === "done"
-  ).length;
-  const inProgressTasks = Tasks?.filter(
-    (task: TaskProps) => task.status === "in_progress"
-  ).length;
+  const totalTasks = Tasks?.length || 0;
+  const completedTasks =
+    Tasks?.filter((task: TaskProps) => task.status === "done").length || 0;
+  const inProgressTasks =
+    Tasks?.filter((task: TaskProps) => task.status === "in_progress").length ||
+    0;
 
   return (
     <div className="flex">
@@ -28,7 +28,7 @@ const HomePage = () => {
         <div className="grid grid-cols-4 gap-9">
           <DashboardCard
             icon={<TasksTwoIcon className="text-brand-primary" />}
-            mainText={Tasks?.length.toString()}
+            mainText={totalTasks}
             secondaryText="Tarefas Disponíveis"
           />
           <DashboardCard

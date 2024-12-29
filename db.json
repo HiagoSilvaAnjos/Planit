@@ -2,23 +2,16 @@
   "tasks": [
     {
       "id": "6bc15de5-06e9-42f3-bb51-29fa65f14574",
-      "title": "fgd",
+      "title": "test",
       "time": "morning",
       "description": "gdfg",
-      "status": "not_started"
+      "status": "in_progress"
     },
     {
       "id": "f2f51785-c1f0-434f-a34e-47413304796a",
       "title": "gdg",
       "time": "morning",
       "description": "gfg",
-      "status": "done"
-    },
-    {
-      "id": "b7f28f53-97f1-4344-8faf-aa664c467c73",
-      "title": "gdfgd",
-      "time": "afternoon",
-      "description": "fdgdfg",
       "status": "not_started"
     },
     {
@@ -26,7 +19,7 @@
       "title": "dgfgd",
       "time": "afternoon",
       "description": "gdfg",
-      "status": "in_progress"
+      "status": "done"
     },
     {
       "id": "af493cd1-45a6-494e-bbe0-a748eed3c1de",
@@ -40,19 +33,26 @@
       "title": "dfgdfg",
       "time": "evening",
       "description": "gdfgdf",
-      "status": "not_started"
+      "status": "done"
     },
     {
       "id": "e1f5472e-6f8d-4e8d-ad70-68daa4e1499d",
       "title": "gdfg",
       "time": "evening",
       "description": "dgfdf",
-      "status": "in_progress"
+      "status": "done"
     },
     {
       "id": "0b9b8c01-6928-4605-b662-a2471d583d90",
       "title": "gdfg",
       "time": "evening",
+      "description": "dfgd",
+      "status": "done"
+    },
+    {
+      "id": "0b824035-7530-4d91-9b28-1eeedf5364b6",
+      "title": "dfgd",
+      "time": "morning",
       "description": "dfgd",
       "status": "done"
     }

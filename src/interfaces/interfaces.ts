@@ -7,7 +7,8 @@ export interface TaskProps {
 }
 
 export interface FormDataProps {
-  title: string;
-  time: "morning" | "afternoon" | "evening";
-  description: string;
+  title?: string;
+  time?: "morning" | "afternoon" | "evening";
+  description?: string;
+  status?: string;
 }
