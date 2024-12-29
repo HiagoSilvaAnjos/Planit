@@ -31,9 +31,9 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
   const handleSaveClick = async (data: FormDataProps) => {
     const newTask = {
       id: uuidv4(),
-      title: data.title,
-      time: data.time,
-      description: data.description,
+      title: data.title || "",
+      time: data.time || "morning",
+      description: data.description || "",
       status: "not_started" as const,
     };
 
@@ -83,7 +83,7 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
                     {...register("title", {
                       required: "Título é obrigatório",
                       validate: (value) =>
-                        value.trim() ? true : "Título não pode estar vazio!",
+                        value?.trim() ? true : "Título não pode estar vazio!",
                     })}
                     errorMessage={errors.title?.message}
                     disabled={isPending}
@@ -105,7 +105,9 @@ const AddTaskDialog = ({ isOpen, DialogClose }: AddTaskDialogProps) => {
                     {...register("description", {
                       required: "Descrição é obrigatória",
                       validate: (value) =>
-                        value.trim() ? true : "Descrição não pode estar vazia!",
+                        value?.trim()
+                          ? true
+                          : "Descrição não pode estar vazia!",
                     })}
                     errorMessage={errors.description?.message}
                     disabled={isPending}
