@@ -28,7 +28,7 @@ const TaskDetails = () => {
   } = useForm<FormDataProps>();
 
   const handleBackClick = () => {
-    navigate("/tasks");
+    navigate(-1);
   };
 
   const { data: task, isSuccess } = useGetTask(validTaskId, (task) => {
